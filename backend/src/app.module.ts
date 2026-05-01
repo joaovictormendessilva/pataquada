@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
@@ -18,10 +19,13 @@ import { TypeOrmModule } from '@nestjs/typeorm';
         password: config.get<string>('DB_PASSWORD'),
         database: config.get<string>('DB_DATABASE'),
         synchronize: config.get<boolean>('DB_SYNCHRONIZE'),
+        migrationsRun: config.get<boolean>('DB_MIGRATIONS_RUN'),
         logging: config.get<boolean>('DB_LOGGING'),
         entities: [],
       }),
     }),
+
+    UserModule,
   ],
 })
 export class AppModule {}
