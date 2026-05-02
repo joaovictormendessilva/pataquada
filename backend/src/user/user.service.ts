@@ -79,22 +79,30 @@ export class UserService {
     });
   }
 
-  private rollTreasure() {
+  private rollTreasure(): Omit<DigResponseDto, 'remainingEnergy'> {
     const totalWeight = PRIZES.reduce((sum, p) => sum + p.weight, 0);
     const roll = Math.random() * totalWeight;
 
     let accumulated = 0;
     for (const prize of PRIZES) {
       accumulated += prize.weight;
+
       if (roll < accumulated) {
+        const coinsEarned = this.rollCoins(prize.min, prize.max);
+
         return {
           found: prize.treasure !== TreasureEnum.NONE,
           treasure: prize.treasure,
-          coinsEarned: prize.coins,
+          coinsEarned,
         };
       }
     }
 
     return { found: false, treasure: TreasureEnum.NONE, coinsEarned: 0 };
+  }
+
+  private rollCoins(min: number, max: number): number {
+    const raw = Math.random() * (max - min) + min;
+    return Math.round(raw * 100) / 100;
   }
 }

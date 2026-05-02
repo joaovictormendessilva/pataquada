@@ -5,8 +5,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-
-const USER_DEFAULT_ENERGY = 10;
+import { USER_DEFAULT_ENERGY } from '../constants/user-default-energy.constants';
 
 @Entity('users')
 export class UserEntity {
