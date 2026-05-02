@@ -13,12 +13,16 @@ import { DigDto } from './dtos/dig.dto';
 import { UserEntity } from './entity/user.entity';
 import { PRIZES } from './constants/prizes.constants';
 import { TreasureEnum } from './enums/treasures.enum';
+import { WalletEntity } from '../wallet/entity/wallet.entity';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(UserEntity)
     private readonly userRepository: Repository<UserEntity>,
+
+    @InjectRepository(WalletEntity)
+    private readonly walletRepository: Repository<WalletEntity>,
   ) {}
 
   async create(dto: CreateUserDto): Promise<CreateUserResponseDto> {
@@ -43,7 +47,7 @@ export class UserService {
   }
 
   async dig(dto: DigDto): Promise<DigResponseDto> {
-    const user = await this.findUser(dto.userId);
+    const user = await this.findUserAndWallet(dto.userId);
 
     if (!user) {
       throw new NotFoundException('Usuário não encontrado.');
@@ -61,6 +65,10 @@ export class UserService {
 
     const treasure = this.rollTreasure();
 
+    if (treasure.found) {
+      await this.incrementWallet(user.wallet.id, treasure.coinsEarned);
+    }
+
     const mappedTreasure: DigResponseDto = {
       found: treasure.found,
       treasure: treasure.treasure,
@@ -71,11 +79,12 @@ export class UserService {
     return mappedTreasure;
   }
 
-  private async findUser(id: number) {
+  private async findUserAndWallet(id: number): Promise<UserEntity | null> {
     return await this.userRepository.findOne({
       where: {
         id,
       },
+      relations: { wallet: true },
     });
   }
 
@@ -104,5 +113,12 @@ export class UserService {
   private rollCoins(min: number, max: number): number {
     const raw = Math.random() * (max - min) + min;
     return Math.round(raw * 100) / 100;
+  }
+
+  private async incrementWallet(
+    id: number,
+    coinsEarned: number,
+  ): Promise<void> {
+    await this.walletRepository.increment({ id }, 'balance', coinsEarned);
   }
 }
