@@ -1,11 +1,15 @@
 import {
+  BeforeInsert,
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { USER_DEFAULT_ENERGY } from '../constants/user-default-energy.constants';
+import { WalletEntity } from '../../wallet/entity/wallet.entity';
 
 @Entity('users')
 export class UserEntity {
@@ -35,4 +39,8 @@ export class UserEntity {
 
   @UpdateDateColumn({ name: 'updated_at' })
   updatedAt: Date;
+
+  @OneToOne(() => WalletEntity, (wallet) => wallet.user, { cascade: true })
+  @JoinColumn()
+  wallet: WalletEntity = new WalletEntity();
 }
