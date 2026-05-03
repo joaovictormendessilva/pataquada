@@ -1,0 +1,163 @@
+@import url("https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Nunito:wght@400;500;700;800&display=swap");
+@import "tailwindcss";
+
+@theme {
+  /* ───── Cores principais ───── */
+  --color-orange: #f5a500;
+  --color-orange-dark: #d4780a;
+  --color-orange-light: #ffb830;
+  --color-yellow: #ffd000;
+  --color-yellow-dark: #c9a000;
+  --color-brown: #5c3a1e;
+  --color-brown-light: #7a5c2a;
+  --color-brown-dark: #3a2010;
+
+  /* ───── Tema claro ───── */
+  --color-light-bg: #fff8ec;
+  --color-light-surface: #ffffff;
+  --color-light-border: #1a1a1a;
+  --color-light-text: #1a1a1a;
+  --color-light-text-muted: #7a5c2a;
+  --color-light-input-bg: #ffffff;
+
+  /* ───── Tema escuro ───── */
+  --color-dark-bg: #1a0f00;
+  --color-dark-surface: #2a1800;
+  --color-dark-border: #f5a500;
+  --color-dark-text: #ffd000;
+  --color-dark-text-muted: #a07840;
+  --color-dark-input-bg: #2a1800;
+  --color-dark-input-border: #5c3a1e;
+
+  /* ───── Tipografia ───── */
+  --font-display: "Fredoka", sans-serif; /* títulos e botões */
+  --font-body: "Nunito", sans-serif; /* corpo e labels */
+
+  /* ───── Border radius ───── */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+  --radius-xl: 28px;
+}
+
+/* ─── Reset e base ─── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ─── Tema claro (padrão) ─── */
+:root {
+  --bg: var(--color-light-bg);
+  --surface: var(--color-light-surface);
+  --border: var(--color-light-border);
+  --text: var(--color-light-text);
+  --text-muted: var(--color-light-text-muted);
+  --input-bg: var(--color-light-input-bg);
+  --input-border: var(--color-light-border);
+  --btn-shadow: 3px 3px 0 var(--color-light-border);
+}
+
+/* ─── Tema escuro ─── */
+.dark {
+  --bg: var(--color-dark-bg);
+  --surface: var(--color-dark-surface);
+  --border: var(--color-dark-border);
+  --text: var(--color-dark-text);
+  --text-muted: var(--color-dark-text-muted);
+  --input-bg: var(--color-dark-input-bg);
+  --input-border: var(--color-dark-input-border);
+  --btn-shadow: 3px 3px 0 var(--color-yellow);
+}
+
+/* ─── Componentes base ─── */
+body {
+  background-color: var(--bg);
+  color: var(--text);
+}
+
+/* Card padrão */
+.card {
+  background: var(--surface);
+  border: 2.5px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1.75rem 1.5rem;
+}
+
+/* Input padrão */
+.input {
+  width: 100%;
+  background: var(--input-bg);
+  border: 2px solid var(--input-border);
+  border-radius: var(--radius-md);
+  padding: 10px 14px;
+  font-family: var(--font-body);
+  font-size: 0.9375rem;
+  color: var(--text);
+  outline: none;
+  transition:
+    border-color 150ms ease,
+    box-shadow 150ms ease;
+}
+.input::placeholder {
+  color: var(--text-muted);
+  opacity: 0.6;
+}
+.input:focus {
+  border-color: var(--color-orange);
+  box-shadow: 0 0 0 3px rgba(245, 165, 0, 0.2);
+}
+
+/* Label padrão */
+.label {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+/* Botão primário */
+.btn-primary {
+  width: 100%;
+  background: var(--color-orange);
+  border: 2.5px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 12px;
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  box-shadow: var(--btn-shadow);
+  transition:
+    transform 100ms ease,
+    box-shadow 100ms ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+}
+.btn-primary:hover {
+  background: var(--color-orange-light);
+}
+.btn-primary:active {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0 var(--border);
+}
+.btn-primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
