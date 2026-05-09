@@ -12,7 +12,7 @@ export function GlassCard({ Icon, title, subtitle, extraSubtitle }: GlassCardPro
         backgroundColor: "red",
         width: 250,
         height: 100,
-        borderRadius: 1,
+        borderRadius: 4,
         paddingX: 2,
         background: "rgba(255, 255, 255, 0.08)",
         backdropFilter: "blur(12px)",
