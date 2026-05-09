@@ -5,7 +5,7 @@ export function ProgressBar({
   value,
   max = 100,
   height = 16,
-  color = "#22c55e",
+  color = "#ff9903",
   backgroundColor = "rgba(255,255,255,0.08)",
 }: ProgressBarProps) {
   const percentage = Math.min((value / max) * 100, 100);
