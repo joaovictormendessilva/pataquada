@@ -1,8 +1,7 @@
-import { LucideIcon } from "lucide-react";
-
 export type GlassCardProps = {
-  Icon: LucideIcon;
+  icon: React.ReactNode;
   title: string;
   subtitle: string;
   extraSubtitle?: string | React.ReactNode;
+  variant?: "default" | "special";
 };
