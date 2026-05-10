@@ -9,7 +9,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { WalletEntity } from '../../wallet/entity/wallet.entity';
-import { UserEnergyEntity } from '../../user-energy/entity/user-energy.entity';
+import { EnergyEntity } from '../../energy/entity/energy.entity';
 
 @Entity('users')
 export class UserEntity {
@@ -41,9 +41,9 @@ export class UserEntity {
   @JoinColumn()
   wallet: WalletEntity = new WalletEntity();
 
-  @OneToOne(() => UserEnergyEntity, (userEnergy) => userEnergy.user, {
+  @OneToOne(() => EnergyEntity, (energy) => energy.user, {
     cascade: true,
   })
   @JoinColumn()
-  userEnergy: UserEnergyEntity = new UserEnergyEntity();
+  energy: EnergyEntity = new EnergyEntity();
 }

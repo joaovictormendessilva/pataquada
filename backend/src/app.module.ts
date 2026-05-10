@@ -2,9 +2,9 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { dataSourceOptions } from './database/data-source';
+import { EnergyModule } from './energy/energy.module';
 import { UserModule } from './user/user.module';
 import { WalletModule } from './wallet/wallet.module';
-import { UserEnergyModule } from './user-energy/user-energy.module';
 
 @Module({
   imports: [
@@ -21,7 +21,7 @@ import { UserEnergyModule } from './user-energy/user-energy.module';
 
     WalletModule,
 
-    UserEnergyModule,
+    EnergyModule,
   ],
 })
 export class AppModule {}

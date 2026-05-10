@@ -6,7 +6,7 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcrypt';
 import { FindOptionsRelations, Repository } from 'typeorm';
-import { UserEnergyEntity } from '../user-energy/entity/user-energy.entity';
+import { EnergyEntity } from '../energy/entity/energy.entity';
 import { WalletEntity } from '../wallet/entity/wallet.entity';
 import { PRIZES } from './constants/prizes.constants';
 import { CreateUserResponseDto } from './dtos/create-user-response.dto';
@@ -25,8 +25,8 @@ export class UserService {
     @InjectRepository(WalletEntity)
     private readonly walletRepository: Repository<WalletEntity>,
 
-    @InjectRepository(UserEnergyEntity)
-    private readonly userEnergyEntity: Repository<UserEnergyEntity>,
+    @InjectRepository(EnergyEntity)
+    private readonly energyEntity: Repository<EnergyEntity>,
   ) {}
 
   async create(dto: CreateUserDto): Promise<CreateUserResponseDto> {
@@ -51,20 +51,20 @@ export class UserService {
 
   async dig(dto: DigDto): Promise<DigResponseDto> {
     const user = await this.findUserAndRelations(dto.userId, {
-      userEnergy: true,
+      energy: true,
     });
 
     if (!user) {
       throw new NotFoundException('Usuário não encontrado.');
     }
 
-    if (user.userEnergy.energy === 0) {
+    if (user.energy.energy === 0) {
       throw new BadRequestException('Você não possui mais energia.');
     }
 
-    const remainingEnergy = user.userEnergy.energy - 1;
+    const remainingEnergy = user.energy.energy - 1;
 
-    await this.userEnergyEntity.update(user.userEnergy.id, {
+    await this.energyEntity.update(user.energy.id, {
       energy: remainingEnergy,
     });
 

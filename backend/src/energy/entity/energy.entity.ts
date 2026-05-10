@@ -1,13 +1,13 @@
 import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { DEFAULT_USER_ENERGY } from '../constants/default-user-energy.constants';
+import { DEFAULT_ENERGY } from '../constants/default-energy.constants';
 import { UserEntity } from '../../user/entity/user.entity';
 
-@Entity('user-energies')
+@Entity('energies')
 export class EnergyEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ default: DEFAULT_USER_ENERGY })
+  @Column({ default: DEFAULT_ENERGY })
   energy: number;
 
   @OneToOne(() => UserEntity, (user) => user.energy)
