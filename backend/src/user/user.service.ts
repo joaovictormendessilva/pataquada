@@ -52,6 +52,7 @@ export class UserService {
   async dig(dto: DigDto): Promise<DigResponseDto> {
     const user = await this.findUserAndRelations(dto.userId, {
       energy: true,
+      wallet: true,
     });
 
     if (!user) {
