@@ -1,6 +1,13 @@
-import { Body, Controller, Param, Patch, Post } from '@nestjs/common';
-import { UserService } from './user.service';
+import {
+  Body,
+  Controller,
+  ParseIntPipe,
+  Patch,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { CreateUserDto } from './dtos/create-user.dto';
+import { UserService } from './user.service';
 
 @Controller('user')
 export class UserController {
@@ -11,8 +18,8 @@ export class UserController {
     return await this.userService.create(dto);
   }
 
-  @Patch('dig/:id')
-  async dig(@Param('id') userId: number) {
+  @Patch('dig')
+  async dig(@Query('userId', ParseIntPipe) userId: number) {
     return await this.userService.dig({ userId });
   }
 }
