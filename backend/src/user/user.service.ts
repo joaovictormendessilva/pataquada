@@ -5,15 +5,16 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcrypt';
-import { Repository } from 'typeorm';
+import { FindOptionsRelations, Repository } from 'typeorm';
+import { UserEnergyEntity } from '../user-energy/entity/user-energy.entity';
+import { WalletEntity } from '../wallet/entity/wallet.entity';
+import { PRIZES } from './constants/prizes.constants';
 import { CreateUserResponseDto } from './dtos/create-user-response.dto';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { DigResponseDto } from './dtos/dig-response.dto';
 import { DigDto } from './dtos/dig.dto';
 import { UserEntity } from './entity/user.entity';
-import { PRIZES } from './constants/prizes.constants';
 import { TreasureEnum } from './enums/treasures.enum';
-import { WalletEntity } from '../wallet/entity/wallet.entity';
 
 @Injectable()
 export class UserService {
@@ -23,6 +24,9 @@ export class UserService {
 
     @InjectRepository(WalletEntity)
     private readonly walletRepository: Repository<WalletEntity>,
+
+    @InjectRepository(UserEnergyEntity)
+    private readonly userEnergyEntity: Repository<UserEnergyEntity>,
   ) {}
 
   async create(dto: CreateUserDto): Promise<CreateUserResponseDto> {
@@ -46,45 +50,49 @@ export class UserService {
   }
 
   async dig(dto: DigDto): Promise<DigResponseDto> {
-    return {} as DigResponseDto;
-    // const user = await this.findUserAndWallet(dto.userId);
+    const user = await this.findUserAndRelations(dto.userId, {
+      userEnergy: true,
+    });
 
-    // if (!user) {
-    //   throw new NotFoundException('Usuário não encontrado.');
-    // }
+    if (!user) {
+      throw new NotFoundException('Usuário não encontrado.');
+    }
 
-    // if (user.energy === 0) {
-    //   throw new BadRequestException('Você não possui mais energia.');
-    // }
+    if (user.userEnergy.energy === 0) {
+      throw new BadRequestException('Você não possui mais energia.');
+    }
 
-    // const remainingEnergy = user.energy - 1;
+    const remainingEnergy = user.userEnergy.energy - 1;
 
-    // await this.userRepository.update(user.id, {
-    //   energy: remainingEnergy,
-    // });
+    await this.userEnergyEntity.update(user.userEnergy.id, {
+      energy: remainingEnergy,
+    });
 
-    // const treasure = this.rollTreasure();
+    const treasure = this.rollTreasure();
 
-    // if (treasure.found) {
-    //   await this.incrementWallet(user.wallet.id, treasure.coinsEarned);
-    // }
+    if (treasure.found) {
+      await this.incrementWallet(user.wallet.id, treasure.coinsEarned);
+    }
 
-    // const mappedTreasure: DigResponseDto = {
-    //   found: treasure.found,
-    //   treasure: treasure.treasure,
-    //   coinsEarned: treasure.coinsEarned,
-    //   remainingEnergy,
-    // };
+    const mappedTreasure: DigResponseDto = {
+      found: treasure.found,
+      treasure: treasure.treasure,
+      coinsEarned: treasure.coinsEarned,
+      remainingEnergy,
+    };
 
-    // return mappedTreasure;
+    return mappedTreasure;
   }
 
-  private async findUserAndWallet(id: number): Promise<UserEntity | null> {
+  private async findUserAndRelations(
+    userId: number,
+    relations: FindOptionsRelations<UserEntity>,
+  ) {
     return await this.userRepository.findOne({
       where: {
-        id,
+        id: userId,
       },
-      relations: { wallet: true },
+      relations,
     });
   }
 
