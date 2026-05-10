@@ -1,12 +1,6 @@
-import {
-  Column,
-  Entity,
-  JoinColumn,
-  OneToOne,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
-import { DEFAULT_WALLET_VALUE } from '../constants/default-wallet-value.constants';
+import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { UserEntity } from '../../user/entity/user.entity';
+import { DEFAULT_WALLET_VALUE } from '../constants/default-wallet-value.constants';
 
 @Entity('wallets')
 export class WalletEntity {
