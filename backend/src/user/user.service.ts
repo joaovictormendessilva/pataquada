@@ -38,7 +38,6 @@ export class UserService {
       firstName: createdUser.firstName,
       lastName: createdUser.lastName,
       email: createdUser.email,
-      energy: createdUser.energy,
       createdAt: createdUser.createdAt,
       updatedAt: createdUser.updatedAt,
     };
@@ -47,36 +46,37 @@ export class UserService {
   }
 
   async dig(dto: DigDto): Promise<DigResponseDto> {
-    const user = await this.findUserAndWallet(dto.userId);
+    return {} as DigResponseDto;
+    // const user = await this.findUserAndWallet(dto.userId);
 
-    if (!user) {
-      throw new NotFoundException('Usuário não encontrado.');
-    }
+    // if (!user) {
+    //   throw new NotFoundException('Usuário não encontrado.');
+    // }
 
-    if (user.energy === 0) {
-      throw new BadRequestException('Você não possui mais energia.');
-    }
+    // if (user.energy === 0) {
+    //   throw new BadRequestException('Você não possui mais energia.');
+    // }
 
-    const remainingEnergy = user.energy - 1;
+    // const remainingEnergy = user.energy - 1;
 
-    await this.userRepository.update(user.id, {
-      energy: remainingEnergy,
-    });
+    // await this.userRepository.update(user.id, {
+    //   energy: remainingEnergy,
+    // });
 
-    const treasure = this.rollTreasure();
+    // const treasure = this.rollTreasure();
 
-    if (treasure.found) {
-      await this.incrementWallet(user.wallet.id, treasure.coinsEarned);
-    }
+    // if (treasure.found) {
+    //   await this.incrementWallet(user.wallet.id, treasure.coinsEarned);
+    // }
 
-    const mappedTreasure: DigResponseDto = {
-      found: treasure.found,
-      treasure: treasure.treasure,
-      coinsEarned: treasure.coinsEarned,
-      remainingEnergy,
-    };
+    // const mappedTreasure: DigResponseDto = {
+    //   found: treasure.found,
+    //   treasure: treasure.treasure,
+    //   coinsEarned: treasure.coinsEarned,
+    //   remainingEnergy,
+    // };
 
-    return mappedTreasure;
+    // return mappedTreasure;
   }
 
   private async findUserAndWallet(id: number): Promise<UserEntity | null> {

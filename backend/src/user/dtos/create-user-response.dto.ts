@@ -9,8 +9,6 @@ export class CreateUserResponseDto {
 
   email: string;
 
-  energy: number;
-
   createdAt: Date;
 
   updatedAt: Date;

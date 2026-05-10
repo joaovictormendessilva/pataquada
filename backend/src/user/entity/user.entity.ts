@@ -8,8 +8,8 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { USER_DEFAULT_ENERGY } from '../constants/user-default-energy.constants';
 import { WalletEntity } from '../../wallet/entity/wallet.entity';
+import { UserEnergyEntity } from '../../user-energy/entity/user-energy.entity';
 
 @Entity('users')
 export class UserEntity {
@@ -31,9 +31,6 @@ export class UserEntity {
   @Column()
   password: string;
 
-  @Column({ default: USER_DEFAULT_ENERGY })
-  energy: number;
-
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
 
@@ -43,4 +40,10 @@ export class UserEntity {
   @OneToOne(() => WalletEntity, (wallet) => wallet.user, { cascade: true })
   @JoinColumn()
   wallet: WalletEntity = new WalletEntity();
+
+  @OneToOne(() => UserEnergyEntity, (userEnergy) => userEnergy.user, {
+    cascade: true,
+  })
+  @JoinColumn()
+  userEnergy: UserEnergyEntity = new UserEnergyEntity();
 }

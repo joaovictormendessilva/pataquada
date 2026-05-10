@@ -4,6 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { dataSourceOptions } from './database/data-source';
 import { UserModule } from './user/user.module';
 import { WalletModule } from './wallet/wallet.module';
+import { UserEnergyModule } from './user-energy/user-energy.module';
 
 @Module({
   imports: [
@@ -19,6 +20,8 @@ import { WalletModule } from './wallet/wallet.module';
     UserModule,
 
     WalletModule,
+
+    UserEnergyModule,
   ],
 })
 export class AppModule {}
