@@ -1,18 +1,21 @@
 import { Box, Button } from "@mui/material";
-import { useState } from "react";
+import { useDig } from "src/services/user/hooks/useDig";
+import { IDigParams } from "src/services/user/user.types";
 
 export function DigButton() {
-  const [digging, setDigging] = useState(false);
+  const { mutateAsync: digMutateAsync, isPending: isDigPending } = useDig();
 
-  async function handleDig() {
-    if (digging) return;
+  const createPayload = (userId: number): IDigParams => {
+    return {
+      userId,
+    };
+  };
 
-    setDigging(true);
+  const handleDig = async () => {
+    const payload: IDigParams = createPayload(3);
 
-    await new Promise((resolve) => setTimeout(resolve, 1400));
-
-    setDigging(false);
-  }
+    await digMutateAsync(payload);
+  };
 
   return (
     <Box
@@ -32,7 +35,7 @@ export function DigButton() {
           position: "relative",
         }}
       >
-        {digging &&
+        {isDigPending &&
           [...Array(14)].map((_, i) => {
             const randomX = (Math.random() - 0.5) * 160;
 
@@ -79,7 +82,7 @@ export function DigButton() {
           })}
 
         <Button
-          disabled={digging}
+          disabled={isDigPending}
           onClick={handleDig}
           sx={{
             width: 300,
@@ -91,7 +94,7 @@ export function DigButton() {
 
             overflow: "hidden",
 
-            fontSize: digging ? 42 : 54,
+            fontSize: isDigPending ? 42 : 54,
             fontWeight: 900,
 
             letterSpacing: "0.08em",
@@ -110,7 +113,7 @@ export function DigButton() {
 
             border: "12px solid #4a2506",
 
-            boxShadow: digging
+            boxShadow: isDigPending
               ? `
                 inset 0 6px 10px rgba(255,255,255,0.16),
                 inset 0 -10px 16px rgba(0,0,0,0.45),
@@ -133,7 +136,7 @@ export function DigButton() {
               0 5px 10px rgba(0,0,0,0.45)
             `,
 
-            transform: digging ? "translateY(10px) scale(0.97)" : "translateY(0px)",
+            transform: isDigPending ? "translateY(10px) scale(0.97)" : "translateY(0px)",
 
             transition: `
               transform 220ms cubic-bezier(0.22, 1, 0.36, 1),
@@ -141,12 +144,12 @@ export function DigButton() {
               font-size 160ms ease
             `,
 
-            animation: digging ? "digShake 0.45s infinite" : "none",
+            animation: isDigPending ? "digShake 0.45s infinite" : "none",
 
             touchAction: "manipulation",
 
             "&:hover": {
-              transform: digging ? "translateY(10px) scale(0.97)" : "translateY(2px) scale(1.01)",
+              transform: isDigPending ? "translateY(10px) scale(0.97)" : "translateY(2px) scale(1.01)",
             },
 
             "&::before": {
@@ -237,7 +240,7 @@ export function DigButton() {
             },
           }}
         >
-          {digging ? "CAVANDO..." : "CAVAR"}
+          {isDigPending ? "CAVANDO..." : "CAVAR"}
         </Button>
       </Box>
     </Box>
